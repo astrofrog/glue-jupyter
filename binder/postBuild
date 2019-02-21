@@ -22,8 +22,9 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 git clone --branch scatter_webgl https://github.com/maartenbreddels/bqplot/
 jupyter labextension install bqplot/js --no-build
 
-git clone https://github.com/maartenbreddels/ipymaterialui/
-jupyter labextension install ipymaterialui/js --no-build
+# We disable the following for now due to an error during webpack
+# git clone https://github.com/maartenbreddels/ipymaterialui/
+# jupyter labextension install ipymaterialui/js --no-build
 
 # We disable the following for now due to an error during webpack
 # git clone https://github.com/glue-viz/ipyastroimage/
