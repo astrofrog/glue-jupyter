@@ -10,11 +10,6 @@ git config --global user.name "Bin Der"
 
 pip install . jupyterlab --user
 
-# Update variables to point to local install
-
-export PATH="${HOME}/.local/bin:${PATH}"
-export JUPYTER_CONFIG_DIR="${HOME}/.local/etc/jupyter/"
-
 # Install Jupyter Lab widgets extensions
 
 jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build

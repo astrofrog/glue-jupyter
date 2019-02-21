@@ -37,4 +37,9 @@ WORKDIR ${HOME}
 
 # Run post-build script
 
-RUN binder/postBuild
+RUN binder/setup.sh
+
+# Update variables to point to local install
+
+ENV PATH="${HOME}/.local/bin:${PATH}"
+ENV JUPYTER_CONFIG_DIR="${HOME}/.local/etc/jupyter/"
