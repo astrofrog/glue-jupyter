@@ -6,42 +6,31 @@ set -ex
 git config --global user.email "bin@der.com"
 git config --global user.name "Bin Der"
 
-pip install .
+# Install glue-jupyter and all requirements as well as Jupyter Lab
 
-# git clone https://github.com/glue-viz/glue
-# (cd glue; pip install .)
+pip install . jupyterlab --user
 
-jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-threejs ipyvolume@^0.5.0-beta.1 --no-build
+# Update variables to point to local install
 
-# pip uninstall ipyvolume -y
-# git clone https://github.com/maartenbreddels/ipyvolume/
-# pushd ipyvolume
-# pip install -v .
-# jupyter labextension install js --no-build
-# jupyter labextension install jupyter-threejs --no-build
-# popd
+export PATH="${HOME}/.local/bin:${PATH}"
+export JUPYTER_CONFIG_DIR="${HOME}/.local/etc/jupyter/"
 
+# Install Jupyter Lab widgets extensions
 
+jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
 
-pip uninstall bqplot -y
-git clone https://github.com/maartenbreddels/bqplot/
-pushd bqplot
-git checkout scatter_webgl
-pip install .
-jupyter labextension install js --no-build
-popd
+git clone --branch scatter_webgl https://github.com/maartenbreddels/bqplot/
+jupyter labextension install bqplot/js --no-build
 
 git clone https://github.com/maartenbreddels/ipymaterialui/
-pushd ipymaterialui
-pip install .
-jupyter labextension install js --no-build
-popd
+jupyter labextension install ipymaterialui/js --no-build
 
+# We disable the following for now due to an error during webpack
+# git clone https://github.com/glue-viz/ipyastroimage/
+# jupyter labextension install ipyastroimage/js --no-build
 
-git clone https://github.com/glue-viz/ipyastroimage/
-pushd ipyastroimage
-pip install .
-jupyter labextension install js --no-build
-popd
+# jupyter-threejs ipyvolume@^0.5.0-beta.1
+
+# Re-build Jupyter Lab
 
 jupyter lab build
