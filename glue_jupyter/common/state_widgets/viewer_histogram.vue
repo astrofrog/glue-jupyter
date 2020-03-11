@@ -40,6 +40,7 @@
             modeSetChange(v) {
                 this.normalize = v.includes('normalize');
                 this.cumulative = v.includes('cumulative');
+                console.log(this.glue_state);
             }
         }
     }
