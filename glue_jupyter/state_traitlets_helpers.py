@@ -53,7 +53,8 @@ def update_state_from_dict(state, changes):
                     if 'cmap' in name:
                         setattr(state, name, get_cmap(changes[name]))
                     else:
-                        setattr(state, name, changes[name])
+                        if changes[name] is not None:
+                            setattr(state, name, changes[name])
 
 
 class GlueStateJSONEncoder(json.JSONEncoder):
