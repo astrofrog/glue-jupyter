@@ -66,6 +66,8 @@ class SubsetSelect(v.VuetifyTemplate, HubListener):
                               handler=lambda _: self._sync_selected_from_state())
         session.hub.subscribe(self, msg.SubsetCreateMessage,
                               handler=lambda _: self._sync_available_from_state())
+        session.hub.subscribe(self, msg.SubsetUpdateMessage,
+                              handler=lambda _: self._sync_available_from_state())
         session.hub.subscribe(self, msg.SubsetDeleteMessage,
                               handler=lambda _: self._sync_available_from_state())
 

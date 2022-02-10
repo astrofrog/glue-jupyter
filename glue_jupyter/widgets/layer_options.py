@@ -6,10 +6,12 @@ __all__ = ['LayerOptionsWidget']
 
 import traitlets
 import ipywidgets as widgets
+from glue.core import message as msg
 from ..vuetify_helpers import load_template, WidgetCache
+from glue.core.hub import HubListener
 
 
-class LayerOptionsWidget(v.VuetifyTemplate):
+class LayerOptionsWidget(v.VuetifyTemplate, HubListener):
     """
     A widget that contains a way to select layers, and will automatically show
     the options for the selected layer.
@@ -71,6 +73,10 @@ class LayerOptionsWidget(v.VuetifyTemplate):
 
         self.viewer._layer_artist_container.on_changed(_update_layers_from_glue_state)
         _update_layers_from_glue_state()
+
+        self.viewer.session.hub.subscribe(self, msg.SubsetUpdateMessage,
+                                          handler=_update_layers_from_glue_state)
+
 
     def vue_toggle_visible(self, index):
         state = self.viewer.layers[index].state
