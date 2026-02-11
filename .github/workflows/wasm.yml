@@ -10,8 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Install micromamba
+        shell: bash -l {0}
         run: |
           curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
           ./bin/micromamba shell init -s bash
