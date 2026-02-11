@@ -20,9 +20,9 @@ jobs:
         shell: bash -l {0}
         run: |
           micromamba create -y -n wasm-env \
-            --platform emscripten-wasm32 \
-            -c emscripten-forge -c conda-forge \
-            python nodejs pytest pip
+              --platform emscripten-wasm32 \
+              -c emscripten-forge -c conda-forge \
+              python emscripten compilers nodejs
 
       - name: Activate environment
         run: |
