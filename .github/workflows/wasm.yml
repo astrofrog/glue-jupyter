@@ -19,11 +19,10 @@ jobs:
       - name: Create wasm environment
         shell: bash -l {0}
         run: |
+          export CONDA_SUBDIR=emscripten-wasm32
           micromamba create -y -n wasm-env \
-              --platform emscripten-wasm32 \
-              --strict-channel-priority \
-              -c emscripten-forge -c conda-forge \
-              python emscripten compilers nodejs
+            -c emscripten-forge -c conda-forge \
+            python=3.12 nodejs pytest pip compilers emscripten
 
       - name: Activate environment
         run: |
