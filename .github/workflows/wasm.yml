@@ -15,6 +15,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v1
         with:
           environment-name: wasm-env
+          conda-platform: emscripten-wasm32
           create-args: >
             python
             emscripten
