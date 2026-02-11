@@ -21,6 +21,7 @@ jobs:
         run: |
           micromamba create -y -n wasm-env \
               --platform emscripten-wasm32 \
+              --strict-channel-priority \
               -c emscripten-forge -c conda-forge \
               python emscripten compilers nodejs
 
