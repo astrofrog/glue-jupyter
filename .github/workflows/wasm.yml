@@ -23,27 +23,8 @@ jobs:
               -c https://repo.prefix.dev/conda-forge \
               --yes \
               python numpy scipy matplotlib
-
-      - name: Activate environment
-        run: |
-          eval "$(micromamba shell hook --shell bash)"
           micromamba activate wasm-env
           python -V
-
-      - name: Build wheel
-        run: |
-          eval "$(micromamba shell hook --shell bash)"
-          micromamba activate wasm-env
           pip wheel . -w dist
-
-      - name: Install wheel
-        run: |
-          eval "$(micromamba shell hook --shell bash)"
-          micromamba activate wasm-env
           pip install dist/*.whl
-
-      - name: Test installed package
-        run: |
-          eval "$(micromamba shell hook --shell bash)"
-          micromamba activate wasm-env
           pytest --pyargs your_package
