@@ -29,14 +29,20 @@ jobs:
           micromamba activate wasm-env
           python -V
 
-      - name: Build package
+      - name: Build wheel
         run: |
           eval "$(micromamba shell hook --shell bash)"
           micromamba activate wasm-env
-          pip install -e .
+          pip wheel . -w dist
 
-      - name: Run tests
+      - name: Install wheel
         run: |
           eval "$(micromamba shell hook --shell bash)"
           micromamba activate wasm-env
-          pytest
+          pip install dist/*.whl
+
+      - name: Test installed package
+        run: |
+          eval "$(micromamba shell hook --shell bash)"
+          micromamba activate wasm-env
+          pytest --pyargs your_package
