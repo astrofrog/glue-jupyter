@@ -11,18 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install micromamba
-        uses: mamba-org/setup-micromamba@v1
+      - uses: mamba-org/setup-micromamba@v1
         with:
-          environment-name: wasm-env
-          conda-platform: emscripten-wasm32
-          create-args: >
-            python
-            emscripten
-            compilers
-            nodejs
-            -c conda-forge
-            -c emscripten-forge
+          init-shell: bash
+          create-args: ""   # IMPORTANT: prevent auto env creation
+
+      - name: Create wasm environment
+        shell: bash -l {0}
+        run: |
+          micromamba create -y -n wasm-env \
+            --platform emscripten-wasm32 \
+            -c emscripten-forge -c conda-forge \
+            python nodejs pytest pip
 
       - name: Activate environment
         run: |
