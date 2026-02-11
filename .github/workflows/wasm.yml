@@ -22,7 +22,8 @@ jobs:
           export CONDA_SUBDIR=emscripten-wasm32
           micromamba create -y -n wasm-env \
             -c emscripten-forge -c conda-forge \
-            python=3.12 nodejs pytest pip compilers emscripten
+            python=3.12 nodejs pytest pip compilers emscripten \
+            --rc-file /dev/null
 
       - name: Activate environment
         run: |
