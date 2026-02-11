@@ -17,10 +17,12 @@ jobs:
           curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
           eval "$(./bin/micromamba shell hook --shell bash)"
           export CONDA_SUBDIR=emscripten-wasm32
-          micromamba create -y -n wasm-env \
-            -c emscripten-forge -c conda-forge \
-            python=3.12 nodejs pytest pip compilers emscripten \
-            --rc-file /dev/null
+          micromamba create -n wasm-env \
+              --platform=emscripten-wasm32 \
+              -c https://repo.prefix.dev/emscripten-forge-4x\
+              -c https://repo.prefix.dev/conda-forge \
+              --yes \
+              python numpy scipy matplotlib
 
       - name: Activate environment
         run: |
