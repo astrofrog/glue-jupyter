@@ -10,16 +10,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Install micromamba
+
+      - name: Install micromamba and create wasm environment
         shell: bash -l {0}
         run: |
           curl -L https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-          ./bin/micromamba shell init -s bash
           eval "$(./bin/micromamba shell hook --shell bash)"
-
-      - name: Create wasm environment
-        shell: bash -l {0}
-        run: |
           export CONDA_SUBDIR=emscripten-wasm32
           micromamba create -y -n wasm-env \
             -c emscripten-forge -c conda-forge \
