@@ -65,7 +65,6 @@
               :title="props.item[header.value]"
               @dblclick="header.editable && startEdit(props.item.__row__, header.value, props.item[header.value])"
           >
-            <v-slide-x-transition appear mode="out-in">
               <div v-if="isEditing(props.item.__row__, header.value)" class="cell-edit-container">
                 <v-text-field
                   v-model="editValue"
@@ -74,24 +73,27 @@
                   hide-details
                   single-line
                   autofocus
+                  @focus="onEditFocus"
                   @keyup.enter="commitEdit"
                   @keyup.escape="cancelEdit"
                   @click.stop
                 ></v-text-field>
-                <v-icon
-                  small
-                  class="cell-edit-confirm"
-                  color="success"
-                  @click.stop="commitEdit"
-                  title="Confirm (Enter)"
-                >mdi-check</v-icon>
-                <v-icon
-                  small
-                  class="cell-edit-cancel"
-                  color="error"
-                  @click.stop="cancelEdit"
-                  title="Cancel (Escape)"
-                >mdi-close</v-icon>
+                <div class="cell-edit-icons">
+                  <v-icon
+                    small
+                    class="cell-edit-confirm"
+                    color="success"
+                    @click.native.stop="commitEdit"
+                    title="Confirm (Enter)"
+                  >mdi-check</v-icon>
+                  <v-icon
+                    small
+                    class="cell-edit-cancel"
+                    color="error"
+                    @click.native.stop="cancelEdit"
+                    title="Cancel (Escape)"
+                  >mdi-close</v-icon>
+                </div>
               </div>
               <span v-else class="cell-content">
                 {{ props.item[header.value] }}
@@ -102,7 +104,6 @@
                   @click.stop="startEdit(props.item.__row__, header.value, props.item[header.value])"
                 >mdi-pencil</v-icon>
               </span>
-            </v-slide-x-transition>
           </td>
         </tr>
       </template>
@@ -145,6 +146,15 @@ module.exports = {
       return this.editingCell !== null &&
              this.editingCell.row === row &&
              this.editingCell.column === column;
+    },
+    onEditFocus(event) {
+      // Move cursor to start so text isn't truncated at the beginning
+      this.$nextTick(() => {
+        const input = event.target;
+        if (input && input.setSelectionRange) {
+          input.setSelectionRange(0, 0);
+        }
+      });
     }
   }
 }
@@ -219,13 +229,24 @@ module.exports = {
 .cell-edit-container {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+}
+
+.cell-edit-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
 }
 
 .cell-edit-input {
   margin: 0;
   padding: 0;
   flex: 1;
+  font-size: inherit;
+}
+
+.cell-edit-input input {
+  font-size: inherit;
 }
 
 .cell-edit-input .v-input__slot {

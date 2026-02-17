@@ -201,7 +201,6 @@ def test_table_add_remove_data(app, dataxyz, dataxz, data_empty):
     assert len(table.layers) == 0
 
 
-<<<<<<< HEAD
 def test_toggle_select_all(app, dataxyz):
     table = app.table(data=dataxyz)
 
@@ -259,12 +258,10 @@ def test_table_apply_subset_tool(app, dataxyz):
     subset = table.layers[1].layer
     mask = subset.to_mask()
     assert list(mask) == [True, False, True]
-def test_table_editable_column(app, dataxyz):
-    """Test that setting editable_column marks the header as editable."""
-=======
+
+
 def test_table_editable_components(app, dataxyz):
     """Test that setting editable_components marks headers as editable."""
->>>>>>> 74b9ae7 (Move option to state)
     table = app.table(data=dataxyz)
 
     # Initially no columns are editable
