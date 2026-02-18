@@ -66,19 +66,33 @@
               @dblclick="header.editable && startEdit(props.item.__row__, header.value, props.item[header.value])"
           >
             <v-slide-x-transition appear mode="out-in">
-              <v-text-field
-                v-if="isEditing(props.item.__row__, header.value)"
-                v-model="editValue"
-                class="cell-edit-input"
-                dense
-                hide-details
-                single-line
-                autofocus
-                @keyup.enter="commitEdit"
-                @keyup.escape="cancelEdit"
-                @blur="commitEdit"
-                @click.stop
-              ></v-text-field>
+              <div v-if="isEditing(props.item.__row__, header.value)" class="cell-edit-container">
+                <v-text-field
+                  v-model="editValue"
+                  class="cell-edit-input"
+                  dense
+                  hide-details
+                  single-line
+                  autofocus
+                  @keyup.enter="commitEdit"
+                  @keyup.escape="cancelEdit"
+                  @click.stop
+                ></v-text-field>
+                <v-icon
+                  small
+                  class="cell-edit-confirm"
+                  color="success"
+                  @click.stop="commitEdit"
+                  title="Confirm (Enter)"
+                >mdi-check</v-icon>
+                <v-icon
+                  small
+                  class="cell-edit-cancel"
+                  color="error"
+                  @click.stop="cancelEdit"
+                  title="Cancel (Escape)"
+                >mdi-close</v-icon>
+              </div>
               <span v-else class="cell-content">
                 {{ props.item[header.value] }}
                 <v-icon
@@ -202,12 +216,31 @@ module.exports = {
   opacity: 1;
 }
 
+.cell-edit-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .cell-edit-input {
   margin: 0;
   padding: 0;
+  flex: 1;
 }
 
 .cell-edit-input .v-input__slot {
   min-height: unset !important;
+}
+
+.cell-edit-confirm,
+.cell-edit-cancel {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.cell-edit-confirm:hover,
+.cell-edit-cancel:hover {
+  opacity: 1;
 }
 </style>
