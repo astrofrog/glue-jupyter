@@ -2,7 +2,8 @@ import traitlets
 from glue.core import Data
 from glue.core.state_objects import State, CallbackProperty
 from echo import ListCallbackProperty
-from glue_jupyter.state_traitlets_helpers import GlueState
+import glue_jupyter as gj
+from glue_jupyter.state_traitlets_helpers import GlueState, update_state_from_dict
 
 
 class Widget1(traitlets.HasTraits):
@@ -96,3 +97,41 @@ def test_from_json_nested_ignore():
     assert widget.state.b == 2
     assert isinstance(widget.state.sub[0].c, Data)
     assert isinstance(widget.state.sub[1], Data)
+
+
+def test_update_state_from_dict_no_stale_overwrite():
+    # Regression test: when update_state_from_dict receives a dict with
+    # both a high-priority property and lower-priority properties whose
+    # values match the current state, the lower-priority properties
+    # should not be applied if a callback from the high-priority property
+    # has since changed them.
+    #
+    # Real-world example: the browser sends {x_log: True, x_min: -10,
+    # x_max: 30}. Setting x_log triggers _reset_x_limits which updates
+    # x_min/x_max to positive values. Without the fix, the stale -10/30
+    # would then overwrite the corrected values because they now differ
+    # from the callback-updated state.
+
+    app = gj.jglue()
+    data = app.add_data(data={'x': [-10, -5, 0, 5, 15, 30],
+                               'y': [5, 10, 20, 35, 40, 50]})[0]
+    viewer = app.scatter2d(data=data)
+    state = viewer.state
+
+    assert state.x_min < 0
+
+    stale_x_min = state.x_min
+    stale_x_max = state.x_max
+
+    # Simulate what the browser sends: x_log changed, but x_min/x_max
+    # are stale (unchanged from the browser's perspective)
+    update_state_from_dict(state, {
+        'x_log': True,
+        'x_min': stale_x_min,
+        'x_max': stale_x_max,
+    })
+
+    # x_min/x_max should have been reset to positive values by the
+    # x_log callback, and NOT overwritten by the stale values
+    assert state.x_min > 0
+    assert state.x_max > 0
